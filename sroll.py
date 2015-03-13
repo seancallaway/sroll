@@ -11,7 +11,7 @@ def main(argv):
 	
 	numargs = len(sys.argv)
 	
-	if numargs < 2:
+	if numargs < 2 or numargs > 3:
 		print 'Usage:  sroll.py #d# (+modifier)'
 		sys.exit(2);
 	elif numargs == 3:
