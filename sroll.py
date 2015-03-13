@@ -11,7 +11,7 @@ def main(argv):
 	
 	numargs = len(sys.argv)
 	
-	if numargs < 2:
+	if numargs < 2 or numargs > 3:
 		print 'Usage:  sroll.py #d# (+modifier)'
 		sys.exit(2);
 	elif numargs == 3:
@@ -20,10 +20,6 @@ def main(argv):
 	
 	random.seed()
 	
-	#############################
-	# TODO: Sanitize user input #
-	#############################
-	
 	numdice, diesize = rawdice.split('d', 1)
 	
 	# Debugging bit to verify input
@@ -31,15 +27,36 @@ def main(argv):
 	#print 'Die size: ', diesize
 	#if modifier != 0:
 	#	print 'Modifier: ', modifier
+	
+	try:	
+		# Sanitize and form input
+		numdice = int(numdice)
+		diesize = int(diesize)
+		modifier = int(modifier)
 		
-	# Roll the dice
-	for i in range(int(numdice)):
-		rolled = random.randint(1, int(diesize))
-		result += rolled
+		output = 'Rolling ' + rawdice + ' plus ' + str(modifier) + ':  '
+		
+		# Roll the dice
+		for i in range(numdice):
+			rolled = random.randint(1, diesize)
+			if i + 1 < numdice:
+				output += '[' + str(rolled) + '] + '
+			else:
+				output += '[' + str(rolled) + ']'
+			result += rolled
 	
-	result += int(modifier)
-	
-	print "Rolling", rawdice, "plus", modifier, ": ", result
+		# Add the modifier
+		if modifier != 0:
+			output += ' + ' + str(modifier)
+			result += modifier
+		
+		print output, ' = ', str(result)
+	except ValueError:
+		print 'Usage:  sroll.py #d# (+modifier)'
+	except:
+		print 'Unexpected error!'
+		raise
+
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
